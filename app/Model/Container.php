@@ -144,18 +144,22 @@ class Container extends AppModel{
 		if(!$this->exists($containerId)){
 			return null;
 		}
-		$container = $this->find('first', [
-			'recursive' => -1,
-			'conditions' => [
-				'id' => $containerId
-			]
-		]);
+
+		$container = Cache::read('TenantByContainer');
+		if(!$container){
+			$container = $this->find('first', [
+				'recursive' => -1,
+				'conditions' => [
+					'id' => $containerId
+				]
+			]);
+			Cache::write('TenantByContainer', $container);
+		}
 
 		$possibleContainerTypes = [CT_GLOBAL, CT_TENANT];
 		while(!in_array($container['Container']['containertype_id'], $possibleContainerTypes)){
 			$container = $this->getParentNode($container['Container']['id']);
 		}
-
 		return [$container['Container']['id'] => $container['Container']['name']];
 	}
 
@@ -257,7 +261,7 @@ class Container extends AppModel{
 						'Eventcorrelation.host_id' => $hostIds,
 						'Eventcorrelation.service_id' => $serviceIds
 					]
-					
+
 				]
 			]);
 
