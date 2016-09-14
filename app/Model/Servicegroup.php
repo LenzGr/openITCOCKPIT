@@ -78,10 +78,25 @@ class Servicegroup extends AppModel{
 				$tenant[] =key($tenant_arr);
 			}
 		}
+
 		if(is_array($tenant)){
 			switch($type){
 				case 'all':
-					return $this->find('all', [
+					$model = $this;
+					return Cache::remember('allServicegroupsByContainerId', function() use ($model, $tenant){
+						return $model->find('all', [
+							'conditions' => [
+								'Container.parent_id' => array_unique(array_values($tenant)),
+								'Container.containertype_id' => CT_SERVICEGROUP
+							],
+							'recursive' => 1,
+							'order' => [
+								'Container.name' => 'ASC'
+							]
+						]);
+					});
+
+/*					return $this->find('all', [
 						'conditions' => [
 							'Container.parent_id' => array_unique(array_values($tenant)),
 							'Container.containertype_id' => CT_SERVICEGROUP
@@ -90,20 +105,25 @@ class Servicegroup extends AppModel{
 						'order' => [
 							'Container.name' => 'ASC'
 						]
-					]);
+					]);*/
 
 				default:
 					$return = [];
-					$results = $this->find('all', [
-						'conditions' => [
-							'Container.parent_id' => array_unique(array_values($tenant)),
-							'Container.containertype_id' => CT_SERVICEGROUP
-						],
-						'recursive' => 1,
-						'order' => [
-							'Container.name' => 'ASC'
-						]
-					]);
+
+					$results = Cache::read('ServicegroupsByContainerId');
+					if(!$results){
+						$results = $this->find('all', [
+							'conditions' => [
+								'Container.parent_id' => array_unique(array_values($tenant)),
+								'Container.containertype_id' => CT_SERVICEGROUP
+							],
+							'recursive' => 1,
+							'order' => [
+								'Container.name' => 'ASC'
+							]
+						]);
+						Cache::write('ServicegroupsByContainerId');
+					}
 					foreach($results as $result){
 						$return[$result['Servicegroup'][$index]] = $result['Container']['name'];
 					}
