@@ -95,18 +95,6 @@ class Servicegroup extends AppModel{
 							]
 						]);
 					});
-
-/*					return $this->find('all', [
-						'conditions' => [
-							'Container.parent_id' => array_unique(array_values($tenant)),
-							'Container.containertype_id' => CT_SERVICEGROUP
-						],
-						'recursive' => 1,
-						'order' => [
-							'Container.name' => 'ASC'
-						]
-					]);*/
-
 				default:
 					$return = [];
 
@@ -122,7 +110,7 @@ class Servicegroup extends AppModel{
 								'Container.name' => 'ASC'
 							]
 						]);
-						Cache::write('ServicegroupsByContainerId');
+						Cache::write('ServicegroupsByContainerId', $results);
 					}
 					foreach($results as $result){
 						$return[$result['Servicegroup'][$index]] = $result['Container']['name'];
