@@ -83,7 +83,7 @@ class Servicegroup extends AppModel{
 			switch($type){
 				case 'all':
 					$model = $this;
-					return Cache::remember('allServicegroupsByContainerId', function() use ($model, $tenant){
+					return Cache::remember('cacheAllServicegroupsByContainerId', function() use ($model, $tenant){
 						return $model->find('all', [
 							'conditions' => [
 								'Container.parent_id' => array_unique(array_values($tenant)),
@@ -98,7 +98,7 @@ class Servicegroup extends AppModel{
 				default:
 					$return = [];
 
-					$results = Cache::read('ServicegroupsByContainerId');
+					$results = Cache::read('cacheServicegroupsByContainerId');
 					if(!$results){
 						$results = $this->find('all', [
 							'conditions' => [

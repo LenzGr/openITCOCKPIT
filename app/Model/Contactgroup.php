@@ -117,29 +117,37 @@ class Contactgroup extends AppModel{
 
 		switch($type){
 			case 'all':
-				return $this->find('all', [
-					'conditions' => [
-						'Container.parent_id' => $tenantContainerIds,
-						'Container.containertype_id' => CT_CONTACTGROUP
-					],
-					'recursive' => 1,
-					'order' => [
-						'Container.name' => 'ASC'
-					]
-				]);
+				$model = $this;
+				return Cache::remember('cacheAllContactgroupsByContainerId', function() use ($model, $tenantContainerIds){
+					return $model->find('all', [
+						'conditions' => [
+							'Container.parent_id' => $tenantContainerIds,
+							'Container.containertype_id' => CT_CONTACTGROUP
+						],
+						'recursive' => 1,
+						'order' => [
+							'Container.name' => 'ASC'
+						]
+					]);
+				});
 
 			default:
 				$return = [];
-				$results = $this->find('all', [
-					'conditions' => [
-						'Container.parent_id' => $tenantContainerIds,
-						'Container.containertype_id' => CT_CONTACTGROUP
-					],
-					'recursive' => 1,
-					'order' => [
-						'Container.name' => 'ASC'
-					]
-				]);
+				$results = Cache::read('cacheContactgroupsByContainerId');
+				if(!$results){
+					$results = $this->find('all', [
+						'conditions' => [
+							'Container.parent_id' => $tenantContainerIds,
+							'Container.containertype_id' => CT_CONTACTGROUP
+						],
+						'recursive' => 1,
+						'order' => [
+							'Container.name' => 'ASC'
+						]
+					]);
+					Cache::write('cacheContactgroupsByContainerId', $results);
+				}
+
 				foreach($results as $result){
 					$return[$result['Contactgroup'][$index]] = $result['Container']['name'];
 				}
