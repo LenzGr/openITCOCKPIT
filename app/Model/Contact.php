@@ -260,24 +260,26 @@ class Contact extends AppModel{
 			}
 		}
 		$tenantContainerIds = array_unique($tenantContainerIds);
-
-		return $this->find($type, [
-			'joins' => [
-				['table' => 'contacts_to_containers',
-					'alias' => 'ContactsToContainers',
-					'type' => 'LEFT',
-					'conditions' => [
-						'ContactsToContainers.contact_id = Contact.id',
+		$model = $this;
+		return Cache::remember('cacheContactsByContainerId', function() use ($model, $type, $tenantContainerIds){
+			return $model->find($type, [
+				'joins' => [
+					['table' => 'contacts_to_containers',
+						'alias' => 'ContactsToContainers',
+						'type' => 'LEFT',
+						'conditions' => [
+							'ContactsToContainers.contact_id = Contact.id',
+						]
 					]
+				],
+				'conditions' => [
+					'ContactsToContainers.container_id' => $tenantContainerIds
+				],
+				'order' => [
+					'Contact.name' => 'ASC'
 				]
-			],
-			'conditions' => [
-				'ContactsToContainers.container_id' => $tenantContainerIds
-			],
-			'order' => [
-				'Contact.name' => 'ASC'
-			]
-		]);
+			]);
+		});
 	}
 
 	/*
