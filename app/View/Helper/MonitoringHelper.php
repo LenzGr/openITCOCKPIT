@@ -337,6 +337,34 @@ class MonitoringHelper extends AppHelper{
 		return false;
 	}
 
+    public function replaceCustomServiceVariables($customvariables, $command_line) {
+        $command = $command_line;
+        foreach ($customvariables as $variable) {
+            $command = str_replace('$_SERVICE'.strtoupper($variable['name']).'$', $variable['value'], $command);
+        }
+        $command = preg_replace("/\$_SERVICE[^\$]+\$/", '$' ,$command);
+
+        return $command;
+    }
+
+    public function replaceCustomHostVariables($customvariables, $command_line) {
+        $command = $command_line;
+        foreach ($customvariables as $variable) {
+            $command = str_replace('$_HOST'.strtoupper($variable['name']).'$', $variable['value'], $command);
+        }
+        $command = preg_replace("/\$_HOST[^\$]+/", '$' ,$command);
+
+        return $command;
+    }
+
+    public function replaceMacroVariables($macrovariable, $command_line) {
+        $command = $command_line;
+        foreach ($macrovariable as $variable) {
+            $command = str_replace($variable['Macro']['name'], $variable['Macro']['value'], $command);
+        }
+        return $command;
+    }
+
 	public function replaceCommandArguments($commandarguments, $command_line){
 		return str_replace(array_keys($commandarguments), array_values($commandarguments), $command_line);
 	}
