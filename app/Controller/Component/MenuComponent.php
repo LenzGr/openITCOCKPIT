@@ -94,7 +94,6 @@ class MenuComponent extends Component {
 						if(!isset($childNode['url']['plugin'])){
 							$childNode['url']['plugin'] = '';
 						}
-						
 						if($this->checkPermissions($childNode['url']['plugin'], $childNode['url']['controller'], $childNode['url']['action'], $permissions)){
 							$_childNodes[$childKey] = $childNode;
 						}else{
@@ -126,10 +125,9 @@ class MenuComponent extends Component {
 			}
 			
 		}
-		
+
 		return $_menu;
 	}
-	
 	public function lower($string){
 		//return strtolower(Inflector::classify($string));
 		return strtolower(str_replace('_', '', $string));

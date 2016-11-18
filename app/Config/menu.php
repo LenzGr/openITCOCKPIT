@@ -25,7 +25,7 @@
 
 $config = [
 	'menu' => [
-		'dashboard' => [
+		/*'dashboard' => [
 			'url' => ['controller' => 'dashboards', 'action' => 'index', 'plugin' => ''],
 			'title' => 'Dashboard',
 			'icon' => 'dashboard',
@@ -36,29 +36,236 @@ $config = [
 					'title' => 'Tactical Overview',
 					'icon' => 'cube',
 					'parent_controller' => 'Administrators'
-					]*/
+					]
 			]
+		],*/
+
+		'views' => [
+			'url' => ['controller' => 'dashboards', 'action' => 'index', 'plugin' => ''],
+			'title' => 'Views',
+			'icon' => 'camera-retro',
+			'order' => 1,
+			'children' => [
+				'itc_dashboard' => [
+					'url' => ['controller' => 'dashboards', 'action' => 'index'],
+					'title' => 'Dashboard',
+					'icon' => 'dashboard',
+					'parent_controller' => 'itc'
+				],
+				'itc_browser' => [
+					'url' => ['controller' => 'browsers', 'action' => 'index'],
+					'title' => 'Browser',
+					'icon' => 'list',
+					'parent_controller' => 'itc'
+				],
+				'itc_logentries' => [
+					'url' => ['controller' => 'logentries', 'action' => 'index'],
+					'title' => 'Log Entries',
+					'icon' => 'file-text-o',
+					'parent_controller' => 'itc'
+				],
+				'itc_notifications' => [
+					'url' => ['controller' => 'notifications', 'action' => 'index'],
+					'title' => 'Notifications',
+					'icon' => 'envelope',
+					'parent_controller' => 'itc'
+				],
+				'itc_graph_collections' => [
+					'url' => ['controller' => 'graph_collections', 'action' => 'index'],
+					'title' => 'Graph Collections',
+					'icon' => 'list-alt',
+					'parent_controller' => 'itc',
+				],
+				'itc_graphgenerator' => [
+					'url' => ['controller' => 'graphgenerators', 'action' => 'index'],
+					'title' => 'Graph Generator',
+					'icon' => 'area-chart',
+					'parent_controller' => 'itc'
+				],
+				'itc_nagiostats' => [
+					'url' => ['controller' => 'nagiostats', 'action' => 'index'],
+					'title' => 'Performance Info',
+					'icon' => 'fighter-jet',
+					'parent_controller' => 'itc'
+				],
+			],
 		],
 
-		'maps' => [
-			'url' => ['controller' => 'statusmaps', 'action' => 'index', 'plugin' => ''],
-			'title' => 'Maps',
-			'icon' => 'map-marker',
+		'monitoring_config' => [
+			'url' => ['controller' => 'contacts', 'action' => 'index', 'plugin' => ''],
+			'title' => 'Monitoring Config',
+			'icon' => 'cogs',
 			'order' => 2,
 			'children' => [
-				'statusmap' => [
+				'itc_contacts' => [
+					'url' => ['controller' => 'contacts', 'action' => 'index'],
+					'title' => 'Contacts',
+					'icon' => 'user',
+					'parent_controller' => 'itc'
+				],
+				'itc_contactgroups' => [
+					'url' => ['controller' => 'contactgroups', 'action' => 'index'],
+					'title' => 'Contact Groups',
+					'icon' => 'users',
+					'parent_controller' => 'itc'
+				],
+				'itc_timeperiods' => [
+					'url' => ['controller' => 'timeperiods', 'action' => 'index'],
+					'title' => 'Time Periods',
+					'icon' => 'clock-o',
+					'parent_controller' => 'itc'
+				],
+				'itc_commands' => [
+					'url' => ['controller' => 'commands', 'action' => 'index'],
+					'title' => 'Commands',
+					'icon' => 'terminal',
+					'parent_controller' => 'itc'
+				],
+				'itc_downtimes' => [
+					'url' => ['controller' => 'downtimes', 'action' => 'index'],
+					'title' => 'Downtimes',
+					'icon' => 'power-off',
+					'parent_controller' => 'itc',
+					'fallback_actions' => ['host', 'service']
+				],
+				'itc_node' => [
+					'url' => ['controller' => 'containers', 'action' => 'index'],
+					'title' => 'Nodes',
+					'icon' => 'link',
+					'parent_controller' => 'itc'
+				],
+				'itc_locations' => [
+					'url' => ['controller' => 'locations', 'action' => 'index'],
+					'title' => 'Locations',
+					'icon' => 'location-arrow',
+					'parent_controller' => 'itc'
+				],
+				'itc_tenants' => [
+					'url' => ['controller' => 'tenants', 'action' => 'index'],
+					'title' => 'Tenants',
+					'icon' => 'home',
+					'parent_controller' => 'itc'
+				],
+				'external_commands' => [
+					'url' => ['controller' => 'cmd', 'action' => 'index', 'plugin' => 'nagios_module'],
+					'title' => 'External Commands',
+					'icon' => 'terminal',
+					'parent_controller' => 'itc'
+				],
+			],
+		],
+
+		'hosts' => [
+			'url' => ['controller' => 'hosts', 'action' => 'index', 'plugin' => ''],
+			'title' => 'Hosts',
+			'icon' => 'desktop',
+			'order' => 3,
+			'children' => [
+				'itc_hosts' => [
+					'url' => ['controller' => 'hosts', 'action' => 'index'],
+					'title' => 'Host List',
+					'icon' => 'desktop',
+					'parent_controller' => 'itc'
+				],
+				'itc_hosttemplates' => [
+					'url' => ['controller' => 'hosttemplates', 'action' => 'index'],
+					'title' => 'Host Templates',
+					'icon' => 'pencil-square-o',
+					'parent_controller' => 'itc'
+				],
+				'itc_hostgroups' => [
+					'url' => ['controller' => 'hostgroups', 'action' => 'index'],
+					'title' => 'Host Groups',
+					'icon' => 'sitemap',
+					'parent_controller' => 'itc'
+				],
+				'itc_hostescalation' => [
+					'url' => ['controller' => 'hostescalations', 'action' => 'index'],
+					'title' => 'Host Escalations',
+					'icon' => 'bomb',
+					'parent_controller' => 'itc'
+				],
+				'itc_hostdependency' => [
+					'url' => ['controller' => 'hostdependencies', 'action' => 'index'],
+					'title' => 'Host Dependencies',
+					'icon' => 'sitemap',
+					'parent_controller' => 'itc'
+				],
+			],
+		],
+
+		'services' => [
+			'url' => ['controller' => 'services', 'action' => 'index', 'plugin' => ''],
+			'title' => 'Services',
+			'icon' => 'cog',
+			'order' => 4,
+			'children' => [
+				'itc_services' => [
+					'url' => ['controller' => 'services', 'action' => 'index'],
+					'title' => 'Service List',
+					'icon' => 'cog',
+					'parent_controller' => 'itc'
+				],
+				'itc_servicetemplates' => [
+					'url' => ['controller' => 'servicetemplates', 'action' => 'index'],
+					'title' => 'Service Templates',
+					'icon' => 'pencil-square-o',
+					'parent_controller' => 'itc'
+				],
+				'itc_servicetemplategroup' => [
+					'url' => ['controller' => 'servicetemplategroups', 'action' => 'index'],
+					'title' => 'Service Tmpl. Grps.',
+					'icon' => 'pencil-square-o',
+					'parent_controller' => 'itc'
+				],
+				'itc_servicegroups' => [
+					'url' => ['controller' => 'servicegroups', 'action' => 'index'],
+					'title' => 'Service Groups',
+					'icon' => 'cogs',
+					'parent_controller' => 'itc'
+				],
+				'itc_serviceescalation' => [
+					'url' => ['controller' => 'serviceescalations', 'action' => 'index'],
+					'title' => 'Service Escalations',
+					'icon' => 'bomb',
+					'parent_controller' => 'itc'
+				],
+				'itc_servicedependency' => [
+					'url' => ['controller' => 'servicedependencies', 'action' => 'index'],
+					'title' => 'Service Dependencies',
+					'icon' => 'sitemap',
+					'parent_controller' => 'itc'
+				],
+			],
+		],
+
+		'module' => [
+			'url' => ['controller' => 'statusmaps', 'action' => 'index', 'plugin' => ''],
+			'title' => 'Module',
+			'icon' => 'cubes',
+			'order' => 8,
+			'children' => [
+				'maps' => [
 					'url' => ['controller' => 'statusmaps', 'action' => 'index'],
-					'title' => 'Status Map',
-					'icon' => 'globe',
-					'parent_controller' => 'itc'
+					'title' => 'Maps',
+					'icon' => 'map-marker',
+					'children' =>[
+						'statusmap' => [
+							'url' => ['controller' => 'statusmaps', 'action' => 'index'],
+							'title' => 'Status Map',
+							'icon' => 'globe',
+							'parent_controller' => 'maps'
+						],
+						'automap' => [
+							'url' => ['controller' => 'automaps', 'action' => 'index'],
+							'title' => 'Auto Map',
+							'icon' => 'magic',
+							'parent_controller' => 'maps'
+						],
+					],
 				],
-				'automap' => [
-					'url' => ['controller' => 'automaps', 'action' => 'index'],
-					'title' => 'Auto Map',
-					'icon' => 'magic',
-					'parent_controller' => 'itc'
-				],
-			]
+
+			],
 		],
 
 		'admin' => [
@@ -66,10 +273,10 @@ $config = [
 			//'url' => ['plugin' => 'proxy', 'controller' => 'index'],
 			'url' => ['controller' => 'changelogs', 'action' => 'index', 'plugin' => ''],
 			'title' => 'Administration',
-			'icon' => 'cogs',
-			'order' => 9,
+			'icon' => 'briefcase',
+			'order' => 11,
 			'children' => [
-				'changelog' => [
+				/*'changelog' => [
 					'url' => ['controller' => 'changelogs', 'action' => 'index'],
 					'title' => 'Change Log',
 					'icon' => 'code-fork',
@@ -80,7 +287,7 @@ $config = [
 					'title' => 'Proxy Settings',
 					'icon' => 'bolt',
 					'parent_controller' => 'Administrators'
-				],
+				],*/
 				'packetmanager' => [
 					'url' => ['controller' => 'packetmanager', 'action' => 'index'],
 					'title' => 'Package Manager',
@@ -99,7 +306,7 @@ $config = [
 					'icon' => 'users',
 					'parent_controller' => 'Administrators'
 				],
-				'debug' => [
+				/*'debug' => [
 					'url' => ['controller' => 'Administrators', 'action' => 'debug'],
 					'title' => 'Debugging',
 					'icon' => 'bug',
@@ -110,7 +317,7 @@ $config = [
 					'title' => 'System Failures',
 					'icon' => 'medkit',
 					'parent_controller' => 'Administrators'
-				],
+				],*/
 				'itc_systemsettings' => [
 					'url' => ['controller' => 'systemsettings', 'action' => 'index'],
 					'title' => 'System Settings',
@@ -134,17 +341,23 @@ $config = [
 					'title' => 'Backup / Restore',
 					'icon' => 'database ',
 					'parent_controller' => 'Administrators'
-				]
+				],
+				'itc_calendars' => [
+					'url' => ['controller' => 'calendars', 'action' => 'index'],
+					'title' => 'Calendar',
+					'icon' => 'calendar',
+					'parent_controller' => 'itc'
+				],
 			]
 		],
 
-		'itc' => [
+		/*'itc' => [
 			// Das aber irgendwie gepfusche?!
 			//'url' => ['plugin' => 'proxy', 'controller' => 'index'],
 			'url' => ['controller' => 'hosts', 'action' => 'index', 'plugin' => ''],
 			'title' => 'Basic Monitoring',
 			'icon' => 'cogs',
-			'order' => 3,
+			'order' => 4,
 			'children' => [
 				'itc_hosts' => [
 					'url' => ['controller' => 'hosts', 'action' => 'index'],
@@ -242,12 +455,12 @@ $config = [
 					'icon' => 'location-arrow',
 					'parent_controller' => 'itc'
 				],
-				/*'itc_devicegroups' => [
+				'itc_devicegroups' => [
 					'url' => ['controller' => 'devicegroups', 'action' => 'index'],
 					'title' => 'Device Groups',
 					'icon' => 'cloud',
 					'parent_controller' => 'itc'
-				],*/
+				],
 				'itc_graphgenerator' => [
 					'url' => ['controller' => 'graphgenerators', 'action' => 'index'],
 					'title' => 'Graph Generator',
@@ -293,7 +506,7 @@ $config = [
 			'url' => ['controller' => 'macros', 'action' => 'index', 'plugin' => ''],
 			'title' => 'Expert Monitoring',
 			'icon' => 'fire',
-			'order' => 4,
+			'order' => 5,
 			'children' => [
 				'itc_macros' => [
 					'url' => ['controller' => 'macros', 'action' => 'index'],
@@ -332,7 +545,7 @@ $config = [
 					'parent_controller' => 'itc'
 				],
 			]
-		],
+		],*/
 		'reporting' => [
 			'url' => ['controller' => 'instantreports', 'action' => 'index', 'plugin' => ''],
 			'title' => 'Reporting',
@@ -363,7 +576,7 @@ $config = [
 			'url' => ['controller' => 'documentations', 'action' => 'wiki', 'plugin' => ''],
 			'title' => 'Documentation',
 			'icon' => 'book',
-			'order' => 6,
+			'order' => 12,
 		]
 	]
 ];
