@@ -34,32 +34,29 @@ App::uses('Html', 'Helper');
  * directory.
  * @author Patrick Nawracay <patrick.nawracay@it-novum.com>
  */
-class AdditionalLinksComponent extends Component
-{
+class AdditionalLinksComponent extends Component {
     public $additionalLinks = [];
 
     /**
      * Constructor
      *
      * @param ComponentCollection $collection A ComponentCollection this component can use to lazy load its components
-     * @param array               $settings   Array of configuration settings.
+     * @param array $settings Array of configuration settings.
      */
-    public function __construct(ComponentCollection $collection, $settings = [])
-    {
+    public function __construct(ComponentCollection $collection, $settings = []) {
         parent::__construct($collection, $settings);
         $this->additionalLinks = $this->_loadAdditionalLinksConfiguration();
         $this->additionalContent = $this->_loadAdditionalContentConfiguration();
     }
 
-    protected function _loadAdditionalLinksConfiguration()
-    {
+    protected function _loadAdditionalLinksConfiguration() {
         $menuName = 'additional_links';
 
         $modulePlugins = array_filter(CakePlugin::loaded(), function ($value) {
             return strpos($value, 'Module') !== false;
         });
         foreach ($modulePlugins as $pluginName) {
-            Configure::load($pluginName.'.'.$menuName, 'silent', 'false');
+            Configure::load($pluginName . '.' . $menuName, 'silent', 'false');
         }
 
         $additionalLinks = Configure::read($menuName);
@@ -71,15 +68,14 @@ class AdditionalLinksComponent extends Component
         return $additionalLinks;
     }
 
-    protected function _loadAdditionalContentConfiguration()
-    {
+    protected function _loadAdditionalContentConfiguration() {
         $menuName = 'additional_content';
 
         $modulePlugins = array_filter(CakePlugin::loaded(), function ($value) {
             return strpos($value, 'Module') !== false;
         });
         foreach ($modulePlugins as $pluginName) {
-            Configure::load($pluginName.'.'.$menuName, 'silent', 'false');
+            Configure::load($pluginName . '.' . $menuName, 'silent', 'false');
         }
 
         $additionalLinks = Configure::read($menuName);
@@ -95,14 +91,13 @@ class AdditionalLinksComponent extends Component
      * Fetches the data out of the configuration array and returns the sorted link elements
      * as array.
      *
-     * @param String          $controller
-     * @param String          $action
+     * @param String $controller
+     * @param String $action
      * @param String|String[] $viewPosition
      *
      * @return String[] The menu entries
      */
-    public function fetchLinkData($controller, $action, $viewPosition)
-    {
+    public function fetchLinkData($controller, $action, $viewPosition) {
         $result = [];
 
         foreach ($this->additionalLinks as $link) {
@@ -116,8 +111,8 @@ class AdditionalLinksComponent extends Component
             }
 
             $_defaults = [
-                'url'            => null,
-                'options'        => [],
+                'url' => null,
+                'options' => [],
                 'confirmMessage' => false,
             ];
             $linkData = Hash::merge($_defaults, $link['link']);
@@ -149,14 +144,13 @@ class AdditionalLinksComponent extends Component
      * Fetches the data out of the configuration array and returns the sorted link elements
      * as array.
      *
-     * @param String          $controller
-     * @param String          $action
+     * @param String $controller
+     * @param String $action
      * @param String|String[] $viewPosition
      *
      * @return String[] The menu entries
      */
-    public function fetchContentData($controller, $action, $viewPosition)
-    {
+    public function fetchContentData($controller, $action, $viewPosition) {
         $result = [];
 
         foreach ($this->additionalContent as $elementArray) {
@@ -193,8 +187,7 @@ class AdditionalLinksComponent extends Component
         return $result;
     }
 
-    protected function linkSort($a, $b)
-    {
+    protected function linkSort($a, $b) {
         // First sort by controller
         if ($a['positioning']['controller'] > $b['positioning']['controller']) {
             return 1;
