@@ -608,6 +608,12 @@ class AppController extends Controller {
         $additionalContent = $this->AdditionalLinks->fetchContentData($controller, $action, $contentPositions);
         //debug($additionalContent);
         foreach ($additionalLinks as $viewPosition => $linkData) {
+            if(!empty($linkData) && $viewPosition == 'tab'){
+                foreach($linkData as $key => $data){
+                    //add an id so we can identify tabs
+                    $linkData[$key]['uuid'] = UUID::v4();
+                }
+            }
             //defines the vars link $additionalLinkList or $additionalLinkTab
             $this->set('additionalLinks' . ucfirst($viewPosition), $linkData);
         }
@@ -617,7 +623,6 @@ class AppController extends Controller {
             //defines the vars link $additionalElementsList or $additionalElementsTab
             $this->set('additionalElements' . ucfirst($viewPosition), $linkData);
         }
-
         return $result; // Return what was returned before
     }
 

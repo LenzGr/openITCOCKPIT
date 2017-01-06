@@ -81,7 +81,7 @@ $notification_settings = [
                             class="hidden-mobile hidden-tablet"> <?php echo __('Expert settings'); ?> </span></a>
             </li>
 
-            <?php echo $this->AdditionalLinks->renderAsTabs($additionalLinksList, null, 'host', 'tabLink'); ?>
+            <?php echo $this->AdditionalLinks->renderAsTabs($additionalLinksTab, null, 'host', 'tabLink'); ?>
         </ul>
     </header>
     <div>
@@ -443,7 +443,6 @@ $notification_settings = [
                                 ?>
                             </div>
                         </div>
-                        <?php debug($additionalLinksTab); ?>
                         <!-- render additional Tabs if necessary -->
                         <?php echo $this->AdditionalLinks->renderAsTabs($additionalLinksTab, null, 'host'); ?>
 

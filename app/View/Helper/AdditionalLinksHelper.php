@@ -115,20 +115,28 @@ class AdditionalLinksHelper extends AppHelper {
 
     public function renderTabs($additionalElements){
 
-        $html = '<div id="tab3" class="tab-pane fade">TEST BLA BLA BLA</div>';
-
-        //$html .= '</div>';
-        return $html;
+        $htmlContent = [];
+        foreach($additionalElements as $element){
+            $html = '<div id="tab'.$element['uuid'].'" class="tab-pane fade">';
+            //load element ctp here
+            if(!empty($element['element'])){
+                $html.= $this->renderElements([$element['element']]);
+            }
+            $html.= '</div>';
+            $htmlContent[] = $html;
+        }
+        return implode($htmlContent);
     }
 
     public function renderTabLinks($additionalElements){
         $htmlLink = [];
         foreach($additionalElements as $element){
-            $htmlLink = '<li class=""><a href="#tab3" data-toggle="tab"><i class="fa fa-lg fa-terminal"></i>';
-            $htmlLink .= '<span class="hidden-mobile hidden-tablet">'.__($element['title']).'</span></a>';
-            $htmlLink .= '</li>';
+            $html = '<li class=""><a href="#tab'.$element['uuid'].'" data-toggle="tab">';
+            $html.= '<span class="hidden-mobile hidden-tablet">'.__($element['title']).'</span></a>';
+            $html.= '</li>';
+            $htmlLink[] = $html;
         }
-        return $htmlLink;
+        return implode($htmlLink);
     }
 
     public function renderAsTabs($additionalLinks, $elementId, $type, $renderType = 'tab'){
@@ -143,7 +151,5 @@ class AdditionalLinksHelper extends AppHelper {
         }
 
         return $result;
-
-        debug($additionalLinks);
     }
 }
