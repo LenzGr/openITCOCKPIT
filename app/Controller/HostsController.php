@@ -1305,13 +1305,11 @@ class HostsController extends AppController
                 $hosttemplate = $this->Hosttemplate->findById($this->request->data['Host']['hosttemplate_id']);
             }
             App::uses('UUID', 'Lib');
-
             $data_to_save = $this->Host->prepareForSave(
                 $this->_diffWithTemplate($this->request->data, $hosttemplate),
                 $this->request->data,
                 'add'
             );
-
             $data_to_save['Host']['own_customvariables'] = 0;
             //Add Customvariables data to $data_to_save
             $data_to_save['Customvariable'] = [];
@@ -1323,7 +1321,6 @@ class HostsController extends AppController
                     $data_to_save['Host']['own_customvariables'] = 1;
                 }
             }
-
             if ($this->Host->saveAll($data_to_save)) {
                 $changelog_data = $this->Changelog->parseDataForChangelog(
                     $this->params['action'],

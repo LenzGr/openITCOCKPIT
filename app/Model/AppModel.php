@@ -28,7 +28,7 @@ App::uses('Model', 'Model');
 
 class AppModel extends Model
 {
-    public $actsAs = ['Containable', 'DynamicAssociations'];
+    public $actsAs = ['Containable', 'DynamicAssociations', 'DynamicValidations'];
     protected $lastInsertedIds = [];
     protected $lastInsertedData = [];
 
@@ -124,6 +124,18 @@ class AppModel extends Model
             $dynamicAssociations = $this->Behaviors->DynamicAssociations->dynamicAssociations($this->alias, 'beforeFind');
             if (!empty($dynamicAssociations) && is_array($dynamicAssociations)) {
                 $this->bindModel($dynamicAssociations);
+            }
+        }
+    }
+
+    public function beforeValidate($options = []){
+        if(is_object($this->Behaviors->DynamicValidations)){
+            $additionalValidationRules = $this->Behaviors->DynamicValidations->dynamicValidations($this->alias, 'beforeValidate');
+            if(!empty($additionalValidationRules)){
+                $validator = $this->validator();
+                foreach($additionalValidationRules as $rule => $conditions){
+                    $validator->add($rule,$conditions);
+                }
             }
         }
     }
