@@ -149,6 +149,9 @@ class HostsController extends AppController
         ],
     ];
 
+    //holds the data for a temporary validation purposes
+    public $temporaryRequest = [];
+
     public function index()
     {
         $this->__unbindAssociations('Service');
@@ -1305,11 +1308,14 @@ class HostsController extends AppController
                 $hosttemplate = $this->Hosttemplate->findById($this->request->data['Host']['hosttemplate_id']);
             }
             App::uses('UUID', 'Lib');
+debug($this->request->data);
             $data_to_save = $this->Host->prepareForSave(
                 $this->_diffWithTemplate($this->request->data, $hosttemplate),
                 $this->request->data,
                 'add'
             );
+//debug($data_to_save);
+//$data_to_save['Maximoconfiguration'] = $this->request->data['Maximoconfiguration'];
             $data_to_save['Host']['own_customvariables'] = 0;
             //Add Customvariables data to $data_to_save
             $data_to_save['Customvariable'] = [];
@@ -1320,6 +1326,11 @@ class HostsController extends AppController
                 if (!empty($data_to_save)) {
                     $data_to_save['Host']['own_customvariables'] = 1;
                 }
+            }
+debug($data_to_save);
+            $this->Host->temporaryRequest = $this->request->data;
+            if(!$this->Host->validates($this->request->data)){
+         //       debug($this->Host->validationErrors);
             }
             if ($this->Host->saveAll($data_to_save)) {
                 $changelog_data = $this->Changelog->parseDataForChangelog(
@@ -1349,6 +1360,7 @@ class HostsController extends AppController
                     $this->serializeErrorMessage();
                 } else {
                     $this->setFlash(__('Data could not be saved'), false);
+                    debug($this->Host->validationErrors);
                 }
 
                 //Refil data that was loaded by ajax due to selected container id
@@ -1371,6 +1383,7 @@ class HostsController extends AppController
         //Refil ajax stuff if set or not
         $this->set(compact(['_hosttemplates', '_hostgroups', '_parenthosts', '_timeperiods', '_contacts', '_contactgroups', 'commands', 'containers', 'masterInstance', 'Customvariable', 'sharingContainers']));
     }
+
 
     public function getSharingContainers($containerId = null, $jsonOutput = true)
     {

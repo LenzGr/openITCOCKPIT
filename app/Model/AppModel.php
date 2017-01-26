@@ -26,8 +26,7 @@
 App::uses('Model', 'Model');
 
 
-class AppModel extends Model
-{
+class AppModel extends Model {
     public $actsAs = ['Containable', 'DynamicAssociations', 'DynamicValidations'];
     protected $lastInsertedIds = [];
     protected $lastInsertedData = [];
@@ -35,14 +34,13 @@ class AppModel extends Model
     /**
      * Validation: Checks if the field is unique in the model
      *
-     * @param array  $data
+     * @param array $data
      * @param string $field
-     * @param bool   $statusScope
+     * @param bool $statusScope
      *
      * @return bool
      */
-    public function isUniqueInModel($data, $field, $statusScope)
-    {
+    public function isUniqueInModel($data, $field, $statusScope) {
         $valid = false;
         if ($this->hasField($field)) {
             $valid = $this->isUnique($data);
@@ -51,8 +49,8 @@ class AppModel extends Model
             if ($statusScope && !$valid) {
                 $active = $this->find('first', [
                     'conditions' => [
-                        $this->alias.'.'.$field => $data[$field],
-                        $this->alias.'.status'  => Status::ACTIVE,
+                        $this->alias . '.' . $field => $data[$field],
+                        $this->alias . '.status' => Status::ACTIVE,
                     ],
                 ]);
                 if (empty($active)) {
@@ -68,13 +66,12 @@ class AppModel extends Model
     /**
      * Retrieves a record by its id.
      *
-     * @param int         $id
+     * @param int $id
      * @param array|false $options Additional find options, will set 'contain' => false if false is passed
      *
      * @return array|false
      */
-    public function get($id, $options = [])
-    {
+    public function get($id, $options = []) {
         if ($options === false) {
             $options = [
                 'contain' => false,
@@ -82,7 +79,7 @@ class AppModel extends Model
         }
         $options = Set::merge([
             'conditions' => [
-                $this->alias.'.'.$this->primaryKey => $id,
+                $this->alias . '.' . $this->primaryKey => $id,
             ],
         ], $options);
 
@@ -93,23 +90,21 @@ class AppModel extends Model
     /**
      * Replacement for Model::saveField() which doesn't change the model state
      *
-     * @param int    $id
+     * @param int $id
      * @param string $field
      * @param string $value
      *
      * @return bool
      */
-    public function updateField($id, $field, $value)
-    {
+    public function updateField($id, $field, $value) {
         $this->updateAll([
-            $this->alias.'.'.$field => $this->getDataSource()->value($value),
+            $this->alias . '.' . $field => $this->getDataSource()->value($value),
         ], [
-            $this->alias.'.'.$this->primaryKey => $id,
+            $this->alias . '.' . $this->primaryKey => $id,
         ]);
     }
 
-    public function isCompositeUnique($data, $options = [])
-    {
+    public function isCompositeUnique($data, $options = []) {
         debug($data);
         debug($this->find('all'));
     }
@@ -118,8 +113,7 @@ class AppModel extends Model
      * A plugin is able to extend core models with dynamic associations that only work
      * if the plugin exist in current installation
      */
-    public function beforeFind($query)
-    {
+    public function beforeFind($query) {
         if (is_object($this->Behaviors->DynamicAssociations)) {
             $dynamicAssociations = $this->Behaviors->DynamicAssociations->dynamicAssociations($this->alias, 'beforeFind');
             if (!empty($dynamicAssociations) && is_array($dynamicAssociations)) {
@@ -128,16 +122,26 @@ class AppModel extends Model
         }
     }
 
-    public function beforeValidate($options = []){
-        if(is_object($this->Behaviors->DynamicValidations)){
-            $additionalValidationRules = $this->Behaviors->DynamicValidations->dynamicValidations($this->alias, 'beforeValidate');
-            if(!empty($additionalValidationRules)){
+    public function beforeValidate($options = []) {
+        if (is_object($this->Behaviors->DynamicValidations)) {
+            $additionalValidationRules = $this->Behaviors->DynamicValidations->dynamicValidations($this->alias);
+            if (!empty($additionalValidationRules)) {
+                debug($this->temporaryRequest);
+                //
+                $additionalData = [];
                 $validator = $this->validator();
-                foreach($additionalValidationRules as $rule => $conditions){
-                    $validator->add($rule,$conditions);
+                foreach ($additionalValidationRules as $field => $conditions) {
+                    debug($this->temporaryRequest[$this->alias]);
+                    $additionalData[$field] = $this->temporaryRequest[$this->alias][$field];
+                    $validator->add($field, $conditions);
                 }
+                debug($additionalData);
             }
         }
+    }
+
+    public function afterValidate() {
+        die('ende');
     }
 
     /*
@@ -146,8 +150,7 @@ class AppModel extends Model
      * If we delete a core object (for example host or service) may be some plugins
      * (Check_MK or maps for example) gets to modified as well (delete host out of mkservices table)
      */
-    public function beforeDelete($cascade = true)
-    {
+    public function beforeDelete($cascade = true) {
         if (is_object($this->Behaviors->DynamicAssociations)) {
             $dynamicAssociations = $this->Behaviors->DynamicAssociations->dynamicAssociations($this->alias, 'beforeDelete');
             //This is not working, but i dont know why!!
@@ -167,13 +170,12 @@ class AppModel extends Model
     /**
      * Create an array for Router::redirect() if you want to redirect to a different page
      *
-     * @param array $params  _controller and _action
+     * @param array $params _controller and _action
      * @param array $default controller and action
      *
      * @return array
      */
-    public function redirect($params = [], $default = [])
-    {
+    public function redirect($params = [], $default = []) {
         $redirect = [];
 
         if (isset($params['named']['_controller'])) {
@@ -199,17 +201,16 @@ class AppModel extends Model
     /**
      * Create an array for Router::redirect() if you want to redirect to a different page
      *
-     * @param array $params   _controller and _action
+     * @param array $params _controller and _action
      * @param array $override params
      *
      * @return array
      */
-    public function flashRedirect($params = [], $override = [])
-    {
+    public function flashRedirect($params = [], $override = []) {
         $redirect = [
             'controller' => $params['controller'],
-            'action'     => $params['action'],
-            'plugin'     => $params['plugin'],
+            'action' => $params['action'],
+            'plugin' => $params['plugin'],
         ];
 
         if (isset($params['named']['_controller'])) {
@@ -233,8 +234,7 @@ class AppModel extends Model
     }
 
 
-    public function afterSave($created, $options = [])
-    {
+    public function afterSave($created, $options = []) {
         if ($created) {
             $this->lastInsertedIds[] = $this->getLastInsertID();
             $this->lastInsertedData[] = $this->data;
@@ -243,8 +243,7 @@ class AppModel extends Model
         return true;
     }
 
-    public function getLastInsertedIds()
-    {
+    public function getLastInsertedIds() {
         return $this->lastInsertedIds;
     }
 
@@ -253,17 +252,15 @@ class AppModel extends Model
      * internally, it might return more results as expected.
      * @return array
      */
-    public function getLastInsertedDataWithId()
-    {
+    public function getLastInsertedDataWithId() {
         return $this->lastInsertedData;
     }
 
-    public function makeItJavaScriptAble($findListResult = [])
-    {
+    public function makeItJavaScriptAble($findListResult = []) {
         $return = [];
         foreach ($findListResult as $key => $value) {
             $return[] = [
-                'key'   => $key,
+                'key' => $key,
                 'value' => $value,
             ];
         }
@@ -278,8 +275,7 @@ class AppModel extends Model
      *
      * @return array $select and key 0 is empty for data-placeholder
      */
-    public function chosenPlaceholder($select = [])
-    {
+    public function chosenPlaceholder($select = []) {
         if (!array_key_exists(0, $select)) {
             //Yes right, php can use the + operator on arrays
             if (is_array($select)) {
