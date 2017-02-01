@@ -742,6 +742,24 @@ class Host extends AppModel {
                 ],
             ];
         }
+
+        if (is_object($this->Behaviors->DynamicValidations)) {
+            $additionalValidationRules = $this->Behaviors->DynamicValidations->dynamicValidations($this->alias);
+            if (!empty($additionalValidationRules)) {
+                debug($this->temporaryRequest);
+                $additionalData = [];
+                $validator = $this->validator();
+                foreach ($additionalValidationRules as $field => $conditions) {
+                    debug($this->temporaryRequest[$this->alias]);
+                    $additionalData[$field] = $this->temporaryRequest[$this->alias][$field];
+                    $validator->add($field, $conditions);
+                }
+                debug($additionalData);
+            }
+        }
+
+
+
         return parent::beforeValidate($options);
     }
 
