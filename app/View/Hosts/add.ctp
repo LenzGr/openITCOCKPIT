@@ -44,7 +44,7 @@ $notification_settings = [
             <?php echo __('Monitoring'); ?>
             <span>>
                 <?php echo __('Host'); ?>
-			</span>
+            </span>
             <div class="third_level"> <?php echo ucfirst($this->params['action']); ?></div>
         </h1>
     </div>
@@ -62,14 +62,14 @@ $notification_settings = [
             <span class="onoffswitch-title" rel="tooltip" data-placement="top"
                   data-original-title="<?php echo __('auto DNS lookup'); ?>"><i class="fa fa-search"></i></span>
             <span class="onoffswitch">
-					<input type="checkbox" id="autoDNSlookup" checked="checked" class="onoffswitch-checkbox"
+                    <input type="checkbox" id="autoDNSlookup" checked="checked" class="onoffswitch-checkbox"
                            name="onoffswitch">
-					<label for="autoDNSlookup" class="onoffswitch-label">
-						<span data-swchoff-text="<?php echo __('Off'); ?>" data-swchon-text="<?php echo __('On'); ?>"
+                    <label for="autoDNSlookup" class="onoffswitch-label">
+                        <span data-swchoff-text="<?php echo __('Off'); ?>" data-swchon-text="<?php echo __('On'); ?>"
                               class="onoffswitch-inner"></span>
-						<span class="onoffswitch-switch"></span>
-					</label>
-				</span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </span>
         </div>
         <ul class="nav nav-tabs pull-right" id="widget-tab-1">
             <li class="active">
@@ -403,17 +403,17 @@ $notification_settings = [
                             </div>
 
                             <?php /*
-							<!-- remote access -->
-							<span class="note pull-left"><?php echo __('Remote access'); ?>:</span>
-							<br class="clearfix" />
-							<?php echo $this->Form->fancyCheckbox('ssh', [
-								'on' => 'SSH',
-								'off' => 'SSH',
-								'showLabel' => false,
-								'wrapGridClass' => 'col col-md-1'
-							]);?>
-								<?php echo $this->Form->input('ssh', ['label' => false]); ?>
-							*/ ?>
+                            <!-- remote access -->
+                            <span class="note pull-left"><?php echo __('Remote access'); ?>:</span>
+                            <br class="clearfix" />
+                            <?php echo $this->Form->fancyCheckbox('ssh', [
+                                'on' => 'SSH',
+                                'off' => 'SSH',
+                                'showLabel' => false,
+                                'wrapGridClass' => 'col col-md-1'
+                            ]);?>
+                                <?php echo $this->Form->input('ssh', ['label' => false]); ?>
+                            */ ?>
                             <!-- Host macro settings -->
                             <div class="host-macro-settings">
                                 <span class="note pull-left"><?php echo __('Host macro settings'); ?>:</span>

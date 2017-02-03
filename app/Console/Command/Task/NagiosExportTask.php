@@ -406,7 +406,11 @@ class NagiosExportTask extends AppShell
 
             $content .= $this->addContent('notification_interval', 1, $hosttemplate['Hosttemplate']['notification_interval']);
             $content .= $this->addContent('notification_period', 1, $hosttemplate['NotifyPeriod']['uuid']);
-            $content .= $this->addContent('notification_options', 1, $this->hostNotificationString($hosttemplate['Hosttemplate']));
+
+            $hostNotificationString = $this->hostNotificationString($hosttemplate['Hosttemplate']);
+            if(!empty($hostNotificationString)){
+                $content .= $this->addContent('notification_options', 1, $hostNotificationString);
+            }
 
             $content .= $this->nl();
             $content .= $this->addContent(';Flap detection settings:', 1);
@@ -909,13 +913,8 @@ class NagiosExportTask extends AppShell
         if ($host['NotifyPeriod']['uuid'] !== null && $host['NotifyPeriod']['uuid'] !== '')
             $content .= $this->addContent('notification_period', 1, $host['NotifyPeriod']['uuid']);
 
-        if (
-            ($host['Host']['notify_on_down'] === '1' || $host['Host']['notify_on_down'] === '0') ||
-            ($host['Host']['notify_on_unreachable'] === '1' || $host['Host']['notify_on_unreachable'] === '0') ||
-            ($host['Host']['notify_on_recovery'] === '1' || $host['Host']['notify_on_recovery'] === '0') ||
-            ($host['Host']['notify_on_flapping'] === '1' || $host['Host']['notify_on_flapping'] === '0') ||
-            ($host['Host']['notify_on_downtime'] === '1' || $host['Host']['notify_on_downtime'] === '0')
-        ) {
+        $hostNotificationString = $this->hostNotificationString($host['Host']);
+        if(!empty($hostNotificationString)){
             $content .= $this->addContent('notification_options', 1, $this->hostNotificationString($host['Host']));
         }
 
@@ -1072,7 +1071,10 @@ class NagiosExportTask extends AppShell
             if ($servicetemplates['NotifyPeriod']['uuid'] !== null && $servicetemplates['NotifyPeriod']['uuid'] !== '') {
                 $content .= $this->addContent('notification_period', 1, $servicetemplates['NotifyPeriod']['uuid']);
             }
-            $content .= $this->addContent('notification_options', 1, $this->serviceNotificationString($servicetemplates['Servicetemplate']));
+            $serviceNotificationString = $this->serviceNotificationString($servicetemplates['Servicetemplate']);
+            if(!empty($serviceNotificationString)) {
+                $content .= $this->addContent('notification_options', 1, $serviceNotificationString);
+            }
 
             $content .= $this->nl();
             $content .= $this->addContent(';Flap detection settings:', 1);

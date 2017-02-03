@@ -67,6 +67,8 @@ class Host extends AppModel
             'joinTable'             => 'hosts_to_hostgroups',
             'foreignKey'            => 'host_id',
             'associationForeignKey' => 'hostgroup_id',
+            'unique'                => true,
+            'dependent'             => true,
         ],
     ];
 

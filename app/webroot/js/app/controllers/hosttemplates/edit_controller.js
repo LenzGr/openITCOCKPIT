@@ -45,13 +45,15 @@ App.Controllers.HosttemplatesEditController = Frontend.AppController.extend({
 				timeperiods: '#HosttemplateNotifyPeriodId',
 				checkperiods: '#HosttemplateCheckPeriodId',
 				contacts: '#HosttemplateContact',
-				contactgroups: '#HosttemplateContactgroup'
+				contactgroups: '#HosttemplateContactgroup',
+				hostgroups: '#HosttemplateHostgroup'
 			},
 			dataPlaceholderEmpty: self.getVar('data_placeholder_empty'),
 			dataPlaceholder: self.getVar('data_placeholder')
 		});
 		this.$contacts = $('#ContactContact');
 		this.$contactgroups = $('#ContactgroupContactgroup');
+		this.$hostgroups = $('#HostgroupHostgroup');
 
 		// Fix chosen width, if rendered in a tab
 		$("[data-toggle='tab']").on('click', function(){
