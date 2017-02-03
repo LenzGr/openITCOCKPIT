@@ -30,6 +30,8 @@ App::uses('ValidationCollection', 'Lib');
  * @property ParentHost $ParentHost
  */
 class Host extends AppModel {
+    public $actsAs = ['DynamicValidations'];
+
     public $hasAndBelongsToMany = [
         'Container' => [
             'className' => 'Container',
@@ -206,7 +208,6 @@ class Host extends AppModel {
                 'message' => 'This value needs to be numeric'
             ]
         ],
-
     ];
 
 
@@ -722,6 +723,8 @@ class Host extends AppModel {
         return $redirect;
     }
 
+    public $additionalValidationRules = [];
+    public $additionalData = [];
 
     public function beforeValidate($options = []) {
         $params = Router::getParams();
@@ -743,24 +746,41 @@ class Host extends AppModel {
             ];
         }
 
+        debug($options);
         if (is_object($this->Behaviors->DynamicValidations)) {
-            $additionalValidationRules = $this->Behaviors->DynamicValidations->dynamicValidations($this->alias);
-            if (!empty($additionalValidationRules)) {
-                debug($this->temporaryRequest);
-                $additionalData = [];
+            $this->additionalValidationRules = $this->Behaviors->DynamicValidations->dynamicValidations($this->alias);
+            if (!empty($this->additionalValidationRules)) {
                 $validator = $this->validator();
-                foreach ($additionalValidationRules as $field => $conditions) {
-                    debug($this->temporaryRequest[$this->alias]);
-                    $additionalData[$field] = $this->temporaryRequest[$this->alias][$field];
-                    $validator->add($field, $conditions);
+                //iterate through modules
+                foreach ($this->additionalValidationRules as $moduleModel => $validationRules){
+                    //and then the validation rules
+                    foreach ($validationRules as $field => $conditions) {
+                        $this->additionalData[$moduleModel][$field] = $this->temporaryRequest[$this->alias][$field];
+                        $validator->add($field, $conditions);
+                    }
                 }
-                debug($additionalData);
+                debug($validator->getField());
             }
         }
 
-
-
+        debug($this->validate);
         return parent::beforeValidate($options);
+    }
+
+    public function afterValidate(){
+        //remove module data from host array -> may not necessary
+     /*   if(!empty($this->additionalValidationRules)){
+            //there are some additional validation rules
+            $validator = $this->validator();
+            //iterate through modules
+            foreach ($this->additionalValidationRules as $moduleModel => $validationRules){
+                //and then the validation rules
+                foreach ($validationRules as $field => $conditions) {
+                    //remove dynamic validation Rules
+                    $validator->remove($field);
+                }
+            }
+        }*/
     }
 
     /**

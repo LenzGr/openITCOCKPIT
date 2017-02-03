@@ -27,7 +27,7 @@ App::uses('Model', 'Model');
 
 
 class AppModel extends Model {
-    public $actsAs = ['Containable', 'DynamicAssociations', 'DynamicValidations'];
+    public $actsAs = ['Containable', 'DynamicAssociations'];
     protected $lastInsertedIds = [];
     protected $lastInsertedData = [];
 

@@ -1308,7 +1308,6 @@ class HostsController extends AppController
                 $hosttemplate = $this->Hosttemplate->findById($this->request->data['Host']['hosttemplate_id']);
             }
             App::uses('UUID', 'Lib');
-debug($this->request->data);
             $data_to_save = $this->Host->prepareForSave(
                 $this->_diffWithTemplate($this->request->data, $hosttemplate),
                 $this->request->data,
@@ -1328,11 +1327,22 @@ debug($this->request->data);
                 }
             }
 debug($data_to_save);
+            debug($this->request->data);
             $this->Host->temporaryRequest = $this->request->data;
             if(!$this->Host->validates($this->request->data)){
-         //       debug($this->Host->validationErrors);
+
+                debug($this->Host->validationErrors);
             }
-            if ($this->Host->saveAll($data_to_save)) {
+debug($this->additionalData);
+            $validate = true;
+            //no additional data to save so we need to let the saveAll validate
+            if(!empty($this->additionalData)){
+                $validate = false;
+            }
+
+      //      debug($data_to_save);
+            die('ende');
+            if ($this->Host->saveAll($data_to_save, ['validate' => $validate])) {
                 $changelog_data = $this->Changelog->parseDataForChangelog(
                     $this->params['action'],
                     $this->params['controller'],

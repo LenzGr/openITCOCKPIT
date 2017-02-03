@@ -50,7 +50,6 @@ class DynamicValidationsBehavior extends ModelBehavior {
         }
 
         $dynamicValidations = Configure::read($configFileName);
-
         return $dynamicValidations;
     }
 
