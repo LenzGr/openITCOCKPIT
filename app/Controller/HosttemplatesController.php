@@ -180,7 +180,6 @@ class HosttemplatesController extends AppController {
         ]);
         if (!$this->allowedByContainerId(Hash::extract($hosttemplate, 'Container.id'))) {
             $this->render403();
-
             return;
         }
 
@@ -197,6 +196,7 @@ class HosttemplatesController extends AppController {
         $contactgroups = $this->Contactgroup->findList();
         $timeperiods = $this->Timeperiod->find('list');
         $commands = $this->Command->hostCommands('list');
+        $hostgroups = $this->Hostgroup->findList();
         // End changelog
 
         if ($this->hasRootPrivileges === true) {
@@ -218,8 +218,7 @@ class HosttemplatesController extends AppController {
         $_timeperiods = $this->Timeperiod->timeperiodsByContainerId($containerIds, 'list');
         $_contacts = $this->Contact->contactsByContainerId($containerIds, 'list');
         $_contactgroups = $this->Contactgroup->contactgroupsByContainerId($containerIds, 'list');
-        $_hostgroups = [];
-
+        $_hostgroups = $this->Hostgroup->hostgroupsByContainerId($containerIds, 'list', 'id');
 
         //Fix that we dont lose any unsaved host macros, because of vaildation error
         if (isset($this->request->data['Customvariable'])) {
@@ -452,7 +451,7 @@ class HosttemplatesController extends AppController {
                     $_timeperiods = $this->Timeperiod->timeperiodsByContainerId($containerIds, 'list');
                     $_contacts = $this->Contact->contactsByContainerId($containerIds, 'list');
                     $_contactgroups = $this->Contactgroup->contactgroupsByContainerId($containerIds, 'list');
-                    $_hostgroups = $this->Hostgroup->hostgroupsByContainerId($containerIds, 'list');
+                    $_hostgroups = $this->Hostgroup->hostgroupsByContainerId($containerIds, 'list', 'id');
 
                 }
             }
@@ -718,7 +717,7 @@ class HosttemplatesController extends AppController {
                     $_timeperiods = $this->Timeperiod->timeperiodsByContainerId($containerIds, 'list');
                     $_contacts = $this->Contact->contactsByContainerId($containerIds, 'list');
                     $_contactgroups = $this->Contactgroup->contactgroupsByContainerId($containerIds, 'list');
-                    $_hostgroups = $this->Hostgroup->hostgroupsByContainerId($containerIds, 'list');
+                    $_hostgroups = $this->Hostgroup->hostgroupsByContainerId($containerIds, 'list', 'id');
                 }
             }
         }
