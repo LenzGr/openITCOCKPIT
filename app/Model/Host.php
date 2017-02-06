@@ -192,7 +192,7 @@ class Host extends AppModel {
             ],
 
         ],
-
+/*
         'priority' => [
             'notBlank' => [
                 'rule' => 'notBlank',
@@ -208,6 +208,7 @@ class Host extends AppModel {
                 'message' => 'This value needs to be numeric'
             ]
         ],
+*/
     ];
 
 
@@ -746,7 +747,7 @@ class Host extends AppModel {
             ];
         }
 
-        debug($options);
+        //debug($options);
         if (is_object($this->Behaviors->DynamicValidations)) {
             $this->additionalValidationRules = $this->Behaviors->DynamicValidations->dynamicValidations($this->alias);
             if (!empty($this->additionalValidationRules)) {
@@ -759,11 +760,11 @@ class Host extends AppModel {
                         $validator->add($field, $conditions);
                     }
                 }
-                debug($validator->getField());
             }
         }
 
-        debug($this->validate);
+        debug($this->additionalData);
+        //debug($this->validate);
         return parent::beforeValidate($options);
     }
 

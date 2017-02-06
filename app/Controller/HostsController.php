@@ -1326,20 +1326,37 @@ class HostsController extends AppController
                     $data_to_save['Host']['own_customvariables'] = 1;
                 }
             }
-debug($data_to_save);
-            debug($this->request->data);
+//debug($data_to_save);
+          //  debug($this->request->data);
             $this->Host->temporaryRequest = $this->request->data;
             if(!$this->Host->validates($this->request->data)){
 
-                debug($this->Host->validationErrors);
+            //    debug($this->Host->validationErrors);
             }
-debug($this->additionalData);
+//debug($this->additionalData);
+            $additionalData =[
+                'Maximoconfiguration' => [
+                    'impact_level' => '4',
+                    'urgency_level' => '4',
+                    'maximoownergroup' => '14',
+                    'maximoservice' => '4',
+                    'type' => 'host'
+                ]
+            ];
+
+            $data_to_save['Host'] = array_merge($data_to_save['Host'],$additionalData['Maximoconfiguration']);
+            $data_to_save = array_merge($data_to_save, $additionalData);
+//debug($data_to_save);
             $validate = true;
             //no additional data to save so we need to let the saveAll validate
             if(!empty($this->additionalData)){
                 $validate = false;
             }
-
+            debug($this->Host->find('first', [
+                'conditions' => [
+                    'Host.id' => 1
+                ]
+            ]));
       //      debug($data_to_save);
             die('ende');
             if ($this->Host->saveAll($data_to_save, ['validate' => $validate])) {
