@@ -59,16 +59,7 @@ class Hostgroup extends AppModel
             'allowEmpty' => true,
             'required'   => false,
             'message'    => 'Not a valid URL format',
-        ],
-        'Host'          => [
-            'rule'     => ['multiple',
-                [
-                    'min' => 1,
-                ],
-            ],
-            'message'  => 'Please select at least 1 host',
-            'required' => true,
-        ],
+        ]
     ];
 
     public function __construct($id = false, $table = null, $ds = null)

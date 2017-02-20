@@ -46,7 +46,8 @@ App.Controllers.HostsAddController = Frontend.AppController.extend({
 				timeperiods: '#HostNotifyPeriodId',
 				checkperiods: '#HostCheckPeriodId',
 				contacts: '#HostContact',
-				contactgroups: '#HostContactgroup'
+				contactgroups: '#HostContactgroup',
+				hostgroups: '#HostHostgroup'
 			},
 			dataPlaceholderEmpty: self.getVar('data_placeholder_empty'),
 			dataPlaceholder: self.getVar('data_placeholder')
@@ -104,6 +105,7 @@ App.Controllers.HostsAddController = Frontend.AppController.extend({
 
 		this.$contacts = $('#HostContact');
 		this.$contactgroups = $('#HostContactgroup');
+		this.$hostgroups = $('#HostHostgroup');
 
 		this.lang = [];
 		this.lang[1] = this.getVar('lang_minutes');
@@ -713,6 +715,7 @@ App.Controllers.HostsAddController = Frontend.AppController.extend({
 					self.hosttemplateManager.currentContact = responseObject.hosttemplate.Contact;
 					self.hosttemplateManager.currentContactGroup = responseObject.hosttemplate.Contactgroup;
 					self.hosttemplateManager.currentCustomVariables = responseObject.hosttemplate.Customvariable;
+					self.hosttemplateManager.currentHostGroup = responseObject.hosttemplate.Hostgroup;
 
 					// For debugging purposes only // TODO remove before commit
 					window.currentTemplate = responseObject.hosttemplate.Hosttemplate;
@@ -720,6 +723,7 @@ App.Controllers.HostsAddController = Frontend.AppController.extend({
 					window.currentContactGroup = responseObject.hosttemplate.Contactgroup;
 					window.currentCompleteHosttemplate = responseObject.hosttemplate;
 					window.currentCustomVariable = responseObject.hosttemplate.Customvariable;
+					window.currentHostGroup = responseObject.hosttemplate.Hostgroup;
 
 					if(self.hosttemplateManager.currentTemplate.id != hosttemplateId){
 						self.Ajaxloader.hide();
@@ -774,6 +778,13 @@ App.Controllers.HostsAddController = Frontend.AppController.extend({
 							selectedContactgroups.push(jsonContactgroup.id);
 						});
 						self.updateSelectbox({value: selectedContactgroups, selector: '#HostContactgroup', prefix: 'false'});
+
+						//Hostgroups
+						var selectedHostgroups = [];
+						$(responseObject.hosttemplate.Hostgroup).each(function(intIndex, jsonHostgroup){
+							selectedHostgroups.push(jsonHostgroup.id);
+						});
+						self.updateSelectbox({value: selectedHostgroups, selector: '#HostHostgroup', prefix: 'false'});
 
 					}
 
